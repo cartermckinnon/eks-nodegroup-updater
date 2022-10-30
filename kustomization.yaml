@@ -1,0 +1,10 @@
+namespace: eks-nodegroup-updater
+resources:
+  - cronjob.yaml
+configMapGenerator:
+  - name: script
+    files:
+      - script=script.sh
+  - name: target
+    literals:
+      - CLUSTER_NAME=my-cluster

@@ -1,0 +1,25 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: eks-nodegroup-updater
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: hello
+              image: amazon/aws-cli
+              imagePullPolicy: IfNotPresent
+              command:
+                - eks-nodegroup-updater
+              args:
+          env:
+            - name: CLUSTER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: target
+                  key: CLUSTER_NAME
+          restartPolicy: Never
