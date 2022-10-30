@@ -9,7 +9,7 @@ NODEGROUP_NAMES=${NODEGROUP_NAMES:-""}
 
 if [ "$NODEGROUP_NAMES" = "" ]
 then
-    NODEGROUP_NAMES=$(aws eks list-nodegroups --cluster-name $CLUSTER_NAME | jq -r '.nodegroups[]')
+    NODEGROUP_NAMES=$(aws eks list-nodegroups --cluster-name $CLUSTER_NAME --output text --query "nodegroups[] | join(' ', @)")
 else
     NODEGROUP_NAMES=$@
 fi

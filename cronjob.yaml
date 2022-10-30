@@ -14,7 +14,10 @@ spec:
               image: amazon/aws-cli
               imagePullPolicy: IfNotPresent
               command:
-                - eks-nodegroup-updater
+                - /app/eks-nodegroup-updater
+              volumeMounts:
+                - name: script
+                  mountPath: "/app/"
               args:
           env:
             - name: CLUSTER_NAME
@@ -22,4 +25,18 @@ spec:
                 configMapKeyRef:
                   name: target
                   key: CLUSTER_NAME
+            - name: NODEGROUP_NAMES
+              valueFrom:
+                configMapKeyRef:
+                  name: target
+                  key: NODEGROUP_NAMES
+                  optional: true
+          volumes:
+            - name: script
+              configMap:
+                name: script
+                defaultMode: 0555
+                items:
+                  - key: script
+                    path: eks-nodegroup-updater
           restartPolicy: Never
